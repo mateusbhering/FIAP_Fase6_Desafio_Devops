@@ -1,0 +1,121 @@
+# Workflow reutilizavel de deploy. Chamado pelo ci-cd.yml para staging e producao.
+#
+# Alvo do deploy:
+#   - Se o GitHub Environment tiver os secrets DEPLOY_SSH_HOST / DEPLOY_SSH_USER / DEPLOY_SSH_KEY,
+#     o deploy e feito via SSH em um servidor com Docker (VM na nuvem, por exemplo).
+#   - Sem esses secrets, o ambiente e criado no proprio runner do GitHub (ambiente efemero),
+#     o que permite validar o deploy e os smoke tests sem infraestrutura externa.
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: staging ou production
+        required: true
+        type: string
+      image:
+        description: Imagem Docker (com tag) a ser implantada
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    name: Deploy em ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ vars.APP_URL }}
+    permissions:
+      contents: read
+      packages: read
+    env:
+      APP_IMAGE: ${{ inputs.image }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
+      SSH_USER: ${{ secrets.DEPLOY_SSH_USER }}
+      SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+      REMOTE_DIR: ${{ vars.DEPLOY_DIR || 'ecotrack' }}
+      EXPECTED_ENV: ${{ inputs.environment }}
+      SMOKE_ARGS: ${{ inputs.environment == 'production' && '--read-only' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Definir alvo do deploy
+        run: |
+          if [ -n "$SSH_HOST" ]; then
+            echo "ALVO=remoto" >> "$GITHUB_ENV"
+            echo "Deploy remoto via SSH em $SSH_HOST"
+          else
+            echo "ALVO=runner" >> "$GITHUB_ENV"
+            echo "::notice::DEPLOY_SSH_HOST nao configurado para '${{ inputs.environment }}': deploy no runner (ambiente efemero)."
+          fi
+          PORTA=$(grep -E '^APP_PORT=' "deploy/${{ inputs.environment }}.env" | cut -d= -f2)
+          echo "APP_PORT=$PORTA" >> "$GITHUB_ENV"
+
+      # ----------------------------------------------- Alvo: runner
+      - name: Login no GHCR
+        if: env.ALVO == 'runner'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Senha do banco (efemera)
+        if: env.ALVO == 'runner' && env.POSTGRES_PASSWORD == ''
+        run: |
+          SENHA=$(openssl rand -hex 16)
+          echo "::add-mask::$SENHA"
+          echo "POSTGRES_PASSWORD=$SENHA" >> "$GITHUB_ENV"
+
+      - name: Deploy (runner)
+        if: env.ALVO == 'runner'
+        run: ./scripts/deploy.sh "${{ inputs.environment }}"
+
+      - name: Smoke test (runner)
+        if: env.ALVO == 'runner'
+        run: ./scripts/smoke-test.sh "http://localhost:${APP_PORT}" ${SMOKE_ARGS:+"$SMOKE_ARGS"}
+
+      # ----------------------------------------------- Alvo: remoto
+      - name: Configurar SSH
+        if: env.ALVO == 'remoto'
+        run: |
+          install -m 700 -d ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+      - name: Enviar arquivos de orquestracao
+        if: env.ALVO == 'remoto'
+        run: |
+          ssh -i ~/.ssh/id_deploy "$SSH_USER@$SSH_HOST" "mkdir -p '$REMOTE_DIR'"
+          tar czf - docker-compose.yml deploy scripts | \
+            ssh -i ~/.ssh/id_deploy "$SSH_USER@$SSH_HOST" "tar xzf - -C '$REMOTE_DIR'"
+
+      - name: Deploy + smoke test (remoto)
+        if: env.ALVO == 'remoto'
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          test -n "$POSTGRES_PASSWORD" || { echo "::error::Secret POSTGRES_PASSWORD obrigatorio para deploy remoto"; exit 1; }
+          # Heredoc sem aspas de proposito: as variaveis sao resolvidas no runner e enviadas ao servidor
+          # shellcheck disable=SC2087
+          ssh -i ~/.ssh/id_deploy "$SSH_USER@$SSH_HOST" bash -s <<EOF
+          set -euo pipefail
+          echo '${GHCR_TOKEN}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin
+          cd '${REMOTE_DIR}'
+          export APP_IMAGE='${APP_IMAGE}' POSTGRES_PASSWORD='${POSTGRES_PASSWORD}' EXPECTED_ENV='${EXPECTED_ENV}'
+          ./scripts/deploy.sh '${{ inputs.environment }}'
+          ./scripts/smoke-test.sh 'http://localhost:${APP_PORT}' ${SMOKE_ARGS}
+          docker logout ghcr.io
+          EOF
+
+      - name: Resumo do deploy
+        if: always()
+        run: |
+          {
+            echo "### Deploy em \`${{ inputs.environment }}\` — ${{ job.status }}"
+            echo "- Imagem: \`${APP_IMAGE}\`"
+            echo "- Alvo: ${ALVO}"
+            echo "- Porta: ${APP_PORT}"
+          } >> "$GITHUB_STEP_SUMMARY"

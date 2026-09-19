@@ -1,0 +1,4 @@
+logging:
+  level:
+    br.com.fiap.ecotrack: DEBUG
+    org.hibernate.SQL: DEBUG

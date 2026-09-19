@@ -1,0 +1,32 @@
+==> Deploy de ecotrack-api:local em production (projeto ecotrack-prod, porta 8080)
+ Network ecotrack-prod_backend Creating 
+ Volume ecotrack-prod_app-logs Creating 
+ Network ecotrack-prod_frontend Creating 
+ Network ecotrack-prod_backend Creating 
+ Volume ecotrack-prod_app-logs Creating 
+ Network ecotrack-prod_frontend Creating 
+ Volume ecotrack-prod_db-data Creating 
+ Volume ecotrack-prod_db-data Creating 
+ Volume ecotrack-prod_app-logs Created 
+ Volume ecotrack-prod_app-logs Created 
+ Volume ecotrack-prod_db-data Created 
+ Volume ecotrack-prod_db-data Created 
+ Network ecotrack-prod_frontend Created 
+ Network ecotrack-prod_frontend Created 
+ Network ecotrack-prod_backend Created 
+ Network ecotrack-prod_backend Created 
+ Container ecotrack-prod-db-1 Creating 
+ Container ecotrack-prod-db-1 Created 
+ Container ecotrack-prod-app-1 Creating 
+ Container ecotrack-prod-app-1 Created 
+ Container ecotrack-prod-db-1 Starting 
+ Container ecotrack-prod-db-1 Started 
+ Container ecotrack-prod-db-1 Waiting 
+ Container ecotrack-prod-db-1 Healthy 
+ Container ecotrack-prod-app-1 Starting 
+ Container ecotrack-prod-app-1 Started 
+Aguardando http://localhost:8080/actuator/health/readiness (timeout 180s)...
+==> production no ar com ecotrack-api:local
+NAME                  IMAGE                COMMAND                  SERVICE   CREATED         STATUS                            PORTS
+ecotrack-prod-app-1   ecotrack-api:local   "java org.springfram…"   app       9 seconds ago   Up 3 seconds (health: starting)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp
+ecotrack-prod-db-1    postgres:16-alpine   "docker-entrypoint.s…"   db        9 seconds ago   Up 8 seconds (healthy)            5432/tcp

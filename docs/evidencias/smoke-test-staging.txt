@@ -1,0 +1,11 @@
+Smoke test em http://localhost:8081
+  [OK]    health UP
+  [OK]    ambiente reportado = staging
+  [OK]    GET /api/emissoes -> 200
+  [OK]    GET /api/emissoes/resumo -> 200
+  [OK]    POST invalido -> 400
+  [OK]    POST /api/emissoes cria registro
+  [OK]    GET /api/emissoes/1 -> 200
+  [OK]    resumo da empresa soma 1.235 tCO2e
+  [OK]    DELETE /api/emissoes/1 -> 204
+Smoke test OK.

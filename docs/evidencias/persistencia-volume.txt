@@ -1,0 +1,7 @@
+# Persistencia: dados sobrevivem a remocao dos containers (volume db-data)
+Registros antes: {"empresa":"FIAP","quantidadeRegistros":3,"totalTCo2e":70.421,"totalPorEscopoTCo2e":{"ESCOPO_1":18.250,"ESCOPO_2":42.300,"ESCOPO_3":9.870}}
+$ docker compose -p ecotrack-staging down   # remove containers e redes, mantem volumes
+$ ./scripts/deploy.sh staging
+==> Deploy de ecotrack-api:local em staging (projeto ecotrack-staging, porta 8081)
+==> staging no ar com ecotrack-api:local
+Registros depois: {"empresa":"FIAP","quantidadeRegistros":3,"totalTCo2e":70.421,"totalPorEscopoTCo2e":{"ESCOPO_1":18.250,"ESCOPO_2":42.300,"ESCOPO_3":9.870}}

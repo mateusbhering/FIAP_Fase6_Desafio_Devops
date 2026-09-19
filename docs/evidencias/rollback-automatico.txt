@@ -1,0 +1,22 @@
+# Rollback automatico: deploy de uma versao que nao sobe (ecotrack-api:quebrada)
+
+==> Deploy de ecotrack-api:quebrada em staging (projeto ecotrack-staging, porta 8081)
+    Versao atual: ecotrack-api:local
+Aguardando http://localhost:8081/actuator/health/readiness (timeout 30s)...
+!! A nova versao nao ficou pronta. Logs da aplicacao:
+app-1  | Falha simulada na inicializacao
+app-1  | Falha simulada na inicializacao
+app-1  | Falha simulada na inicializacao
+app-1  | Falha simulada na inicializacao
+app-1  | Falha simulada na inicializacao
+app-1  | Falha simulada na inicializacao
+app-1  | Falha simulada na inicializacao
+app-1  | Falha simulada na inicializacao
+app-1  | Falha simulada na inicializacao
+!! Rollback para ecotrack-api:local
+Aguardando http://localhost:8081/actuator/health/readiness (timeout 30s)...
+!! Rollback concluido; staging segue na versao anterior
+exit code do deploy: 1
+
+Imagem em execucao apos o rollback: ecotrack-api:local
+Health: {"status":"UP"}

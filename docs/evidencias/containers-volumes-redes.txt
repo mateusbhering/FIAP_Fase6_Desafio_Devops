@@ -1,0 +1,42 @@
+$ docker ps --filter name=ecotrack
+NAMES                    IMAGE                STATUS                    PORTS
+ecotrack-prod-app-1      ecotrack-api:local   Up 14 seconds (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp
+ecotrack-prod-db-1       postgres:16-alpine   Up 20 seconds (healthy)   5432/tcp
+ecotrack-staging-app-1   ecotrack-api:local   Up 29 seconds (healthy)   0.0.0.0:8081->8080/tcp, [::]:8081->8080/tcp
+ecotrack-staging-db-1    postgres:16-alpine   Up 34 seconds (healthy)   5432/tcp
+
+$ docker volume ls --filter name=ecotrack
+DRIVER    VOLUME NAME
+local     ecotrack-m2
+local     ecotrack-prod_app-logs
+local     ecotrack-prod_db-data
+local     ecotrack-staging_app-logs
+local     ecotrack-staging_db-data
+
+$ docker network ls --filter name=ecotrack
+NETWORK ID     NAME                        DRIVER    SCOPE
+8945314487d4   ecotrack-prod_backend       bridge    local
+b0274a0c648b   ecotrack-prod_frontend      bridge    local
+c8c1c990baab   ecotrack-staging_backend    bridge    local
+a4ce050d66be   ecotrack-staging_frontend   bridge    local
+
+# Rede backend e interna (sem rota para fora), rede frontend nao:
+ecotrack-staging_backend internal=true containers=ecotrack-staging-db-1 ecotrack-staging-app-1 
+ecotrack-staging_frontend internal=false containers=ecotrack-staging-app-1 
+
+# Variaveis de ambiente injetadas no container de staging (sem a senha):
+APP_ENVIRONMENT=staging
+APP_VERSION=local
+LOG_DIR=/app/logs
+SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ecotrack_staging
+SPRING_DATASOURCE_USERNAME=ecotrack
+SPRING_PROFILES_ACTIVE=staging
+
+# Usuario do processo dentro do container (nao-root):
+uid=999(ecotrack) gid=999(ecotrack) groups=999(ecotrack)
+
+# Log da aplicacao gravado no volume app-logs:
+total 12
+drwxr-xr-x 2 ecotrack ecotrack 4096 Sep 19 15:28 .
+drwxr-xr-x 1 ecotrack ecotrack 4096 Sep 19 15:27 ..
+-rw-r--r-- 1 ecotrack ecotrack  539 Sep 19 15:28 ecotrack-api.log

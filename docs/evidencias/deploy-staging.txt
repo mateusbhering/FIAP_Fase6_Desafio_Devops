@@ -1,0 +1,34 @@
+==> Deploy de ecotrack-api:local em staging (projeto ecotrack-staging, porta 8081)
+ Image postgres:16-alpine Pulling 
+ Image postgres:16-alpine Pulled 
+ Network ecotrack-staging_backend Creating 
+ Network ecotrack-staging_frontend Creating 
+ Volume ecotrack-staging_db-data Creating 
+ Volume ecotrack-staging_app-logs Creating 
+ Network ecotrack-staging_backend Creating 
+ Network ecotrack-staging_frontend Creating 
+ Volume ecotrack-staging_db-data Creating 
+ Volume ecotrack-staging_app-logs Creating 
+ Volume ecotrack-staging_db-data Created 
+ Volume ecotrack-staging_db-data Created 
+ Volume ecotrack-staging_app-logs Created 
+ Volume ecotrack-staging_app-logs Created 
+ Network ecotrack-staging_frontend Created 
+ Network ecotrack-staging_frontend Created 
+ Network ecotrack-staging_backend Created 
+ Network ecotrack-staging_backend Created 
+ Container ecotrack-staging-db-1 Creating 
+ Container ecotrack-staging-db-1 Created 
+ Container ecotrack-staging-app-1 Creating 
+ Container ecotrack-staging-app-1 Created 
+ Container ecotrack-staging-db-1 Starting 
+ Container ecotrack-staging-db-1 Started 
+ Container ecotrack-staging-db-1 Waiting 
+ Container ecotrack-staging-db-1 Healthy 
+ Container ecotrack-staging-app-1 Starting 
+ Container ecotrack-staging-app-1 Started 
+Aguardando http://localhost:8081/actuator/health/readiness (timeout 180s)...
+==> staging no ar com ecotrack-api:local
+NAME                     IMAGE                COMMAND                  SERVICE   CREATED         STATUS                            PORTS
+ecotrack-staging-app-1   ecotrack-api:local   "java org.springfram…"   app       8 seconds ago   Up 3 seconds (health: starting)   0.0.0.0:8081->8080/tcp, [::]:8081->8080/tcp
+ecotrack-staging-db-1    postgres:16-alpine   "docker-entrypoint.s…"   db        9 seconds ago   Up 8 seconds (healthy)            5432/tcp

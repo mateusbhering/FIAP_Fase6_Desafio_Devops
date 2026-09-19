@@ -1,0 +1,25 @@
+$ ./mvnw -B -ntp verify
+
+[INFO] --- jacoco:0.8.15:prepare-agent (default) @ ecotrack-api ---
+[INFO] Running br.com.fiap.ecotrack.controller.RegistroEmissaoControllerTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.711 s -- in br.com.fiap.ecotrack.controller.RegistroEmissaoControllerTest
+[INFO] Running br.com.fiap.ecotrack.EcoTrackIntegrationTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.008 s -- in br.com.fiap.ecotrack.EcoTrackIntegrationTest
+[INFO] Running br.com.fiap.ecotrack.service.RegistroEmissaoServiceTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.094 s -- in br.com.fiap.ecotrack.service.RegistroEmissaoServiceTest
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+[INFO] --- jacoco:0.8.15:report (report) @ ecotrack-api ---
+[INFO] BUILD SUCCESS
+[INFO] Total time:  22.320 s
+
+Cobertura de linhas (JaCoCo): 95.7% (112/117 linhas)
+  ecotrack     EcoTrackApplication              1/3
+  exception    GlobalExceptionHandler           11/11
+  exception    RecursoNaoEncontradoException    2/2
+  dto          RegistroEmissaoResponse          9/9
+  dto          ResumoEmissoesResponse           1/1
+  dto          RegistroEmissaoRequest           1/1
+  controller   RegistroEmissaoController        14/15
+  model        RegistroEmissao                  24/24
+  model        EscopoEmissao                    4/4
+  service      RegistroEmissaoService           45/47

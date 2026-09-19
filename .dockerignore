@@ -1,0 +1,14 @@
+target/
+.git/
+.github/
+.idea/
+.vscode/
+*.iml
+docs/
+deploy/
+scripts/
+logs/
+.env
+.env.*
+docker-compose*.yml
+README.md

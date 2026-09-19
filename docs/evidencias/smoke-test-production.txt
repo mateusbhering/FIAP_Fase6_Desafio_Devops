@@ -1,0 +1,7 @@
+Smoke test em http://localhost:8080
+  [OK]    health UP
+  [OK]    ambiente reportado = production
+  [OK]    GET /api/emissoes -> 200
+  [OK]    GET /api/emissoes/resumo -> 200
+  [OK]    POST invalido -> 400
+Smoke test OK.

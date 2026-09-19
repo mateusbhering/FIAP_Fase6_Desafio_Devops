@@ -1,0 +1,64 @@
+# Orquestracao da EcoTrack API + PostgreSQL.
+#
+# O mesmo arquivo atende local, staging e producao; o que muda entre eles e o
+# arquivo de variaveis (--env-file) e o nome do projeto (-p), que isola
+# containers, redes e volumes de cada ambiente. Exemplos:
+#   docker compose up -d --build                                           # local (.env)
+#   docker compose -p ecotrack-staging --env-file deploy/staging.env up -d # staging
+#   docker compose -p ecotrack-prod    --env-file deploy/production.env up -d
+
+name: ecotrack
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ecotrack}
+      POSTGRES_USER: ${POSTGRES_USER:-ecotrack}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env ou no ambiente}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    image: ${APP_IMAGE:-ecotrack-api:local}
+    build:
+      context: .
+      args:
+        APP_VERSION: ${APP_VERSION:-local}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-default}
+      APP_ENVIRONMENT: ${APP_ENVIRONMENT:-local}
+      APP_VERSION: ${APP_VERSION:-local}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-ecotrack}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-ecotrack}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    volumes:
+      - app-logs:/app/logs
+    networks:
+      - backend
+      - frontend
+
+volumes:
+  db-data:
+  app-logs:
+
+networks:
+  # Rede interna: o banco nao e alcancavel de fora, apenas pela aplicacao
+  backend:
+    internal: true
+  # Rede de borda: expoe apenas a aplicacao
+  frontend:
