@@ -4,6 +4,10 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # Saltos de versao principal (ex.: Spring Boot 4, springdoc 3) exigem migracao planejada
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
@@ -12,3 +16,9 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # A imagem acompanha a versao LTS do Java usada no projeto (17)
+      - dependency-name: "eclipse-temurin"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "maven"
+        versions: [">= 3-eclipse-temurin-18"]
