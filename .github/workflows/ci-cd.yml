@@ -59,7 +59,7 @@ jobs:
 
       - name: Publicar relatorios de teste e cobertura
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: relatorios-testes
           path: |
@@ -68,7 +68,7 @@ jobs:
           retention-days: 14
 
       - name: Publicar artefato (jar)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ecotrack-api-jar
           path: target/ecotrack-api.jar
