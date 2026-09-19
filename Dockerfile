@@ -14,7 +14,7 @@ RUN --mount=type=cache,target=/root/.m2 mvn -B -q package -DskipTests \
  && java -Djarmode=tools -jar target/ecotrack-api.jar extract --layers --launcher --destination target/extracted
 
 # ---------- Etapa 2: runtime ----------
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:24-jre
 LABEL org.opencontainers.image.title="ecotrack-api" \
       org.opencontainers.image.description="API ESG de inventario de emissoes GHG" \
       org.opencontainers.image.licenses="MIT"
