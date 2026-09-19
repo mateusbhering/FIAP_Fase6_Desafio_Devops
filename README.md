@@ -16,6 +16,16 @@ Sobre a aplicação foi montado o ciclo DevOps completo: **pipeline CI/CD no Git
 deploy automatizado em **staging** e **produção**, aplicação **containerizada** e **orquestrada com Docker Compose**
 (API + PostgreSQL, com volumes, variáveis de ambiente e redes).
 
+### Integrantes
+
+| Nome | RM |
+|---|---|
+| Mateus Bhering Beltrão Santos | RM564760 |
+| Ariel Alves Amaral | RM564563 |
+| Wesley Santos de França | RM563666 |
+| Ronaldo dos Santos Silva | RM561414 |
+| Rodrigo Kumamoto Rêgo | RM566049 |
+
 - Repositório: https://github.com/mateusbhering/FIAP_Fase6_Desafio_Devops
 - Pipeline: https://github.com/mateusbhering/FIAP_Fase6_Desafio_Devops/actions/workflows/ci-cd.yml
 - Documentação técnica (PDF): [`docs/Documentacao-Cidades-ESGInteligentes.pdf`](docs/Documentacao-Cidades-ESGInteligentes.pdf)

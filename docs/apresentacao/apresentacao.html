@@ -59,7 +59,12 @@
   .capa::before, .capa::after { content: none; }
   .capa .eyebrow { color: #99f6e4; }
   .capa h1 { font-size: 54px; margin-bottom: 8px; }
-  .capa .sub { font-size: 24px; opacity: .92; margin: 0 0 40px; }
+  .capa .sub { font-size: 24px; opacity: .92; margin: 0 0 30px; }
+  .capa .integrantes { margin-bottom: 26px; }
+  .capa .integrantes .rotulo { font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #99f6e4; font-weight: 700; margin-bottom: 6px; }
+  .capa .integrantes ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 420px)); gap: 4px 40px; }
+  .capa .integrantes li { font-size: 18px; margin: 0; }
+  .capa .integrantes li span { opacity: .75; font-size: 15px; margin-left: 6px; }
   .capa .meta { font-size: 17px; line-height: 1.7; opacity: .95; }
   .capa .meta b { color: #99f6e4; font-weight: 600; }
 
@@ -92,8 +97,17 @@
   <div class="eyebrow">FIAP · Fase 6 · Navegando pelo mundo DevOps</div>
   <h1>Cidades ESGInteligentes</h1>
   <p class="sub">EcoTrack API: inventário de emissões com pipeline CI/CD, Docker e deploy em staging e produção</p>
+  <div class="integrantes">
+    <div class="rotulo">Integrantes</div>
+    <ul>
+      <li>Mateus Bhering Beltrão Santos <span>RM564760</span></li>
+      <li>Ariel Alves Amaral <span>RM564563</span></li>
+      <li>Wesley Santos de França <span>RM563666</span></li>
+      <li>Ronaldo dos Santos Silva <span>RM561414</span></li>
+      <li>Rodrigo Kumamoto Rêgo <span>RM566049</span></li>
+    </ul>
+  </div>
   <div class="meta">
-    <b>Integrantes:</b> Mateus Bhering<br>
     <b>Repositório:</b> github.com/mateusbhering/FIAP_Fase6_Desafio_Devops<br>
     <b>Stack:</b> Java 17 · Spring Boot 3.5 · PostgreSQL 16 · Docker · GitHub Actions<br>
     <b>Data:</b> setembro de 2026
