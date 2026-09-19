@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Cidades ESGInteligentes — Documentação DevOps</title>
+<style>
+  @page { size: 13.333in 7.5in; margin: 0; }
+  :root {
+    --verde: #0f766e; --verde-claro: #ccfbf1; --verde-escuro: #134e4a;
+    --tinta: #1f2937; --cinza: #6b7280; --linha: #e5e7eb; --fundo: #f8fafc;
+    --ambar: #b45309; --ambar-claro: #fef3c7;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; color: var(--tinta); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .slide {
+    width: 13.333in; height: 7.5in; padding: 0.55in 0.7in 0.5in; position: relative;
+    page-break-after: always; break-after: page; overflow: hidden; background: #fff;
+    display: flex; flex-direction: column;
+  }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+  .slide::after {
+    content: attr(data-n); position: absolute; right: 0.7in; bottom: 0.28in; font-size: 11px; color: var(--cinza);
+  }
+  .slide::before {
+    content: "Cidades ESGInteligentes · EcoTrack API · Desafio DevOps"; position: absolute; left: 0.7in; bottom: 0.28in;
+    font-size: 11px; color: var(--cinza);
+  }
+  .eyebrow { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--verde); font-weight: 700; margin-bottom: 6px; }
+  h1 { font-size: 34px; margin: 0 0 18px; line-height: 1.15; }
+  h2 { font-size: 19px; margin: 0 0 8px; color: var(--verde-escuro); }
+  p, li { font-size: 16px; line-height: 1.45; }
+  ul { margin: 6px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; flex: 1; min-height: 0; }
+  .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .card { border: 1px solid var(--linha); border-radius: 10px; padding: 14px 16px; background: var(--fundo); }
+  .card h2 { font-size: 16px; }
+  .card p, .card li { font-size: 14px; }
+  .num { display: inline-flex; width: 26px; height: 26px; border-radius: 50%; background: var(--verde); color: #fff; font-weight: 700; font-size: 14px; align-items: center; justify-content: center; margin-right: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--linha); vertical-align: top; }
+  th { background: var(--verde-claro); color: var(--verde-escuro); font-weight: 700; }
+  code, pre { font-family: Menlo, Monaco, monospace; }
+  code { font-size: .9em; background: #f1f5f9; padding: 1px 5px; border-radius: 4px; }
+  pre { background: #1e1e2e; color: #cdd6f4; border-radius: 10px; padding: 14px 16px; font-size: 12.5px; line-height: 1.5; margin: 0; white-space: pre-wrap; }
+  pre .c { color: #7f849c; } pre .g { color: #a6e3a1; }
+  .shot { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+  .shot img { max-width: 100%; max-height: 100%; border: 1px solid var(--linha); border-radius: 8px; box-shadow: 0 4px 18px rgba(0,0,0,.08); }
+  .shots2 { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .shots2 img { width: 100%; max-height: 5.3in; object-fit: contain; border: 1px solid var(--linha); border-radius: 8px; }
+  .legenda { font-size: 13px; color: var(--cinza); margin-top: 8px; text-align: center; }
+  .tag { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--verde-claro); color: var(--verde-escuro); }
+  .tag.ambar { background: var(--ambar-claro); color: var(--ambar); }
+
+  /* Capa */
+  .capa { background: linear-gradient(135deg, var(--verde-escuro), var(--verde)); color: #fff; justify-content: center; }
+  .capa::before, .capa::after { content: none; }
+  .capa .eyebrow { color: #99f6e4; }
+  .capa h1 { font-size: 54px; margin-bottom: 8px; }
+  .capa .sub { font-size: 24px; opacity: .92; margin: 0 0 40px; }
+  .capa .meta { font-size: 17px; line-height: 1.7; opacity: .95; }
+  .capa .meta b { color: #99f6e4; font-weight: 600; }
+
+  /* Fluxo */
+  .fluxo { display: flex; align-items: stretch; gap: 10px; margin: 8px 0 14px; }
+  .fluxo .etapa { flex: 1; border: 2px solid var(--verde); border-radius: 10px; padding: 10px 12px; background: #fff; }
+  .fluxo .etapa b { display: block; color: var(--verde-escuro); font-size: 15px; margin-bottom: 4px; }
+  .fluxo .etapa span { font-size: 13px; color: var(--cinza); line-height: 1.35; display: block; }
+  .fluxo .seta { align-self: center; color: var(--verde); font-size: 22px; font-weight: 700; }
+  .fluxo .etapa.prod { border-color: var(--ambar); }
+  .fluxo .etapa.prod b { color: var(--ambar); }
+
+  /* Diagrama de ambiente */
+  .host { border: 2px dashed #94a3b8; border-radius: 12px; padding: 12px 14px 14px; background: var(--fundo); }
+  .host > .t { font-size: 13px; font-weight: 700; color: var(--cinza); margin-bottom: 8px; }
+  .redes { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; }
+  .rede { border-radius: 10px; padding: 10px; }
+  .rede.fe { background: #e0f2fe; border: 1px solid #7dd3fc; }
+  .rede.be { background: #fef3c7; border: 1px solid #fcd34d; }
+  .rede .t { font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+  .svc { background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; font-size: 13px; margin-bottom: 6px; }
+  .svc b { display: block; font-size: 14px; }
+  .vol { display: inline-block; background: #ede9fe; border: 1px solid #c4b5fd; border-radius: 99px; font-size: 12px; padding: 2px 9px; margin: 3px 4px 0 0; }
+</style>
+</head>
+<body>
+
+<!-- 1. Capa -->
+<section class="slide capa">
+  <div class="eyebrow">FIAP · Fase 6 · Navegando pelo mundo DevOps</div>
+  <h1>Cidades ESGInteligentes</h1>
+  <p class="sub">EcoTrack API: inventário de emissões com pipeline CI/CD, Docker e deploy em staging e produção</p>
+  <div class="meta">
+    <b>Integrantes:</b> Mateus Bhering<br>
+    <b>Repositório:</b> github.com/mateusbhering/FIAP_Fase6_Desafio_Devops<br>
+    <b>Stack:</b> Java 17 · Spring Boot 3.5 · PostgreSQL 16 · Docker · GitHub Actions<br>
+    <b>Data:</b> setembro de 2026
+  </div>
+</section>
+
+<!-- 2. Projeto -->
+<section class="slide" data-n="2">
+  <div class="eyebrow">O projeto</div>
+  <h1>Emissões de CO₂ de uma cidade, medidas e consolidadas</h1>
+  <div class="cols">
+    <div>
+      <p>A <b>EcoTrack API</b> registra as emissões de gases de efeito estufa de cidades e organizações e as consolida em
+        <b>toneladas de CO₂ equivalente (tCO₂e)</b>, seguindo os escopos do <b>GHG Protocol</b>. Isso dá à gestão pública um
+        indicador ambiental (o “E” do ESG) acompanhável.</p>
+      <table>
+        <tr><th>Escopo</th><th>Significado</th><th>Exemplo municipal</th></tr>
+        <tr><td><code>ESCOPO_1</code></td><td>Emissões diretas</td><td>Frota de ônibus a diesel</td></tr>
+        <tr><td><code>ESCOPO_2</code></td><td>Energia comprada</td><td>Iluminação pública</td></tr>
+        <tr><td><code>ESCOPO_3</code></td><td>Cadeia de valor</td><td>Coleta e aterro de resíduos</td></tr>
+      </table>
+    </div>
+    <div>
+      <h2>O que o desafio pedia, e onde está</h2>
+      <table>
+        <tr><th>Requisito</th><th>Entrega</th></tr>
+        <tr><td>Pipeline CI/CD</td><td>GitHub Actions: <code>ci-cd.yml</code> + <code>deploy.yml</code></td></tr>
+        <tr><td>Build automático</td><td>Job <i>Build e testes</i> (Maven Wrapper)</td></tr>
+        <tr><td>Testes automatizados</td><td>11 testes, 95,7% de cobertura de linhas</td></tr>
+        <tr><td>Deploy staging + produção</td><td>Jobs encadeados, mesma imagem nos dois</td></tr>
+        <tr><td>Dockerfile</td><td>Multi-stage, não-root, healthcheck</td></tr>
+        <tr><td>Orquestração</td><td><code>docker-compose.yml</code>: API + PostgreSQL</td></tr>
+        <tr><td>Volumes, env, redes</td><td><code>db-data</code>, <code>app-logs</code> · <code>.env</code> por ambiente · rede interna</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Arquitetura geral -->
+<section class="slide" data-n="3">
+  <div class="eyebrow">Arquitetura</div>
+  <h1>Do commit ao ambiente em execução</h1>
+  <div class="fluxo">
+    <div class="etapa"><b>git push</b><span>Branch <code>main</code> no GitHub</span></div><div class="seta">→</div>
+    <div class="etapa"><b>GitHub Actions</b><span>Build, testes e cobertura</span></div><div class="seta">→</div>
+    <div class="etapa"><b>GHCR</b><span>Imagem <code>ecotrack-api:&lt;sha&gt;</code></span></div><div class="seta">→</div>
+    <div class="etapa"><b>Staging</b><span>Deploy + smoke test completo</span></div><div class="seta">→</div>
+    <div class="etapa prod"><b>Produção</b><span>Mesma imagem + smoke test somente leitura</span></div>
+  </div>
+  <div class="cols" style="grid-template-columns: 1.3fr 1fr;">
+    <div class="host" style="align-self:start">
+      <div class="t">Cada ambiente = um projeto Docker Compose (ecotrack-staging · ecotrack-prod)</div>
+      <div class="redes">
+        <div class="rede fe"><div class="t">rede frontend (exposta)</div>
+          <div class="svc"><b>app</b>Spring Boot · porta 8081 (stg) / 8080 (prd)<br>usuário não-root · healthcheck</div>
+          <span class="vol">volume app-logs</span>
+        </div>
+        <div class="rede be"><div class="t">rede backend (internal: true, sem saída externa)</div>
+          <div class="svc"><b>app ⇄ db</b>JDBC <code>jdbc:postgresql://db:5432/…</code></div>
+          <div class="svc"><b>db</b>PostgreSQL 16 · sem porta publicada · healthcheck pg_isready</div>
+          <span class="vol">volume db-data</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2>Camadas da aplicação</h2>
+      <ul>
+        <li><b>controller</b>: REST + validação (Bean Validation), erros no padrão RFC 7807</li>
+        <li><b>service</b>: regras e consolidação em tCO₂e</li>
+        <li><b>repository</b>: Spring Data JPA</li>
+        <li><b>Flyway</b> versiona o schema; o Hibernate só valida (<code>ddl-auto: validate</code>)</li>
+        <li><b>Actuator</b>: <code>/health</code>, <code>/readiness</code>, <code>/info</code> (versão e ambiente)</li>
+        <li><b>Perfis</b>: <code>staging</code> (debug, Swagger) · <code>prod</code> (log WARN, sem Swagger, health sem detalhes)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Pipeline -->
+<section class="slide" data-n="4">
+  <div class="eyebrow">Pipeline CI/CD · GitHub Actions</div>
+  <h1>Quatro etapas encadeadas, com um gate entre cada uma</h1>
+  <div class="cols-4" style="margin-bottom:18px">
+    <div class="card"><h2><span class="num">1</span>Build e testes</h2>
+      <p><code>./mvnw verify</code> compila e roda os 11 testes (unitários, web e integração) e a cobertura JaCoCo. Publica o resumo dos testes e os relatórios e o <code>.jar</code> como artefatos.</p></div>
+    <div class="card"><h2><span class="num">2</span>Imagem Docker</h2>
+      <p>Buildx com cache do GitHub Actions. Push para o GHCR com as tags <code>&lt;sha&gt;</code> (imutável) e <code>main</code>.</p></div>
+    <div class="card"><h2><span class="num">3</span>Deploy staging</h2>
+      <p>Environment <code>staging</code>. <code>deploy.sh</code> sobe o Compose, espera a readiness e roda o smoke test completo: cria, consulta, consolida e apaga um registro.</p></div>
+    <div class="card"><h2><span class="num">4</span>Deploy produção</h2>
+      <p>Environment <code>production</code>, que aceita aprovação manual. Implanta a <b>mesma imagem</b> e roda o smoke test somente leitura.</p></div>
+  </div>
+  <div class="cols">
+    <div>
+      <h2>Lógica</h2>
+      <ul>
+        <li><b>Gatilhos:</b> push na <code>main</code> roda tudo. <i>Pull request</i> roda só a etapa 1. Commits só de documentação não disparam.</li>
+        <li><b>Gates:</b> teste falhou, não há imagem. Staging falhou, não há produção.</li>
+        <li><b>Build once, deploy many:</b> produção recebe exatamente o artefato validado em staging.</li>
+        <li><b>Rollback automático:</b> se a nova versão não fica pronta, o script volta a anterior.</li>
+        <li><b>Concorrência:</b> dois deploys nunca rodam ao mesmo tempo (<code>concurrency</code>).</li>
+      </ul>
+    </div>
+    <div>
+      <h2>Segredos e alvo do deploy</h2>
+      <ul>
+        <li>A senha do banco vem dos <b>secrets de cada Environment</b>. No repositório ficam só configurações não sensíveis (<code>deploy/*.env</code>).</li>
+        <li><b>Servidor via SSH</b>: com <code>DEPLOY_SSH_*</code> configurados, envia o Compose e os scripts para uma VM com Docker.</li>
+        <li><b>Runner do GitHub</b> (configuração atual): o ambiente sobe no próprio runner com o mesmo Compose e o mesmo script. Valida ponta a ponta, e o ambiente é efêmero.</li>
+        <li><b>Dependabot</b> mantém as dependências, as actions e as imagens atualizadas.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Docker -->
+<section class="slide" data-n="5">
+  <div class="eyebrow">Docker · arquitetura da imagem</div>
+  <h1>Dockerfile multi-stage: build pesado, runtime enxuto</h1>
+  <div class="cols">
+    <pre><span class="c"># Etapa 1: build</span>
+<span class="g">FROM</span> maven:3.9-eclipse-temurin-17 AS build
+<span class="g">COPY</span> pom.xml .
+<span class="g">RUN</span> --mount=type=cache,target=/root/.m2 mvn dependency:go-offline
+<span class="g">COPY</span> src ./src
+<span class="g">RUN</span> --mount=type=cache,target=/root/.m2 mvn package -DskipTests \
+ &amp;&amp; java -Djarmode=tools -jar target/ecotrack-api.jar \
+      extract --layers --launcher --destination target/extracted
+
+<span class="c"># Etapa 2: runtime</span>
+<span class="g">FROM</span> eclipse-temurin:17-jre
+<span class="g">RUN</span> groupadd --system ecotrack &amp;&amp; useradd --system ... ecotrack
+<span class="g">COPY</span> --from=build .../dependencies/ ./
+<span class="g">COPY</span> --from=build .../spring-boot-loader/ ./
+<span class="g">COPY</span> --from=build .../snapshot-dependencies/ ./
+<span class="g">COPY</span> --from=build .../application/ ./
+<span class="g">ENV</span> JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75 ..."
+<span class="g">USER</span> ecotrack
+<span class="g">EXPOSE</span> 8080
+<span class="g">VOLUME</span> ["/app/logs"]
+<span class="g">HEALTHCHECK</span> CMD curl -fsS .../actuator/health/readiness ...
+<span class="g">ENTRYPOINT</span> ["java", "org.springframework.boot.loader.launch.JarLauncher"]</pre>
+    <div>
+      <table>
+        <tr><th>Estratégia</th><th>Benefício</th></tr>
+        <tr><td>Multi-stage</td><td>A imagem final não leva Maven, JDK nem código-fonte</td></tr>
+        <tr><td>Cache de dependências</td><td>Mudar o código não baixa as bibliotecas de novo</td></tr>
+        <tr><td>Camadas do Spring Boot</td><td>Bibliotecas (60 MB) separadas do código (188 kB); um novo deploy transfere quase nada</td></tr>
+        <tr><td>Usuário não-root</td><td>Menor impacto em caso de invasão</td></tr>
+        <tr><td>Healthcheck na readiness</td><td>O Compose sabe quando a API está pronta de fato</td></tr>
+        <tr><td>MaxRAMPercentage</td><td>A JVM respeita o limite de memória do container</td></tr>
+        <tr><td>APP_VERSION = SHA</td><td>Rastreabilidade em <code>/actuator/info</code></td></tr>
+        <tr><td>Base multi-arquitetura</td><td>Roda em amd64 (CI) e arm64 (Apple Silicon)</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 6. Compose + comandos -->
+<section class="slide" data-n="6">
+  <div class="eyebrow">Docker Compose · comandos usados</div>
+  <h1>Um arquivo Compose para três ambientes</h1>
+  <div class="cols">
+    <div>
+      <table>
+        <tr><th>Recurso</th><th>Configuração</th></tr>
+        <tr><td>Serviços</td><td><code>db</code> (PostgreSQL 16) e <code>app</code>, com <code>depends_on: service_healthy</code> e <code>restart: unless-stopped</code></td></tr>
+        <tr><td>Volumes</td><td><code>db-data</code> (dados persistentes), <code>app-logs</code> (logs)</td></tr>
+        <tr><td>Redes</td><td><code>backend</code> interna (app ⇄ banco), <code>frontend</code> (expõe só a API)</td></tr>
+        <tr><td>Variáveis</td><td><code>.env</code> local · <code>deploy/staging.env</code> · <code>deploy/production.env</code> · senha via secret, obrigatória (<code>${POSTGRES_PASSWORD:?}</code>)</td></tr>
+      </table>
+      <br>
+      <table>
+        <tr><th></th><th>Staging</th><th>Produção</th></tr>
+        <tr><td>Projeto (<code>-p</code>)</td><td>ecotrack-staging</td><td>ecotrack-prod</td></tr>
+        <tr><td>Porta</td><td>8081</td><td>8080</td></tr>
+        <tr><td>Perfil Spring</td><td>staging</td><td>prod</td></tr>
+        <tr><td>Smoke test</td><td>completo (escrita)</td><td>somente leitura</td></tr>
+      </table>
+    </div>
+    <pre><span class="c"># Local</span>
+cp .env.example .env
+docker compose up -d --build
+docker compose ps
+docker compose logs -f app
+docker compose down            <span class="c"># mantém volumes</span>
+
+<span class="c"># Build da imagem</span>
+docker build -t ecotrack-api:local .
+
+<span class="c"># Ambientes (o mesmo script do pipeline)</span>
+export APP_IMAGE=ecotrack-api:local SKIP_PULL=true
+POSTGRES_PASSWORD=*** ./scripts/deploy.sh staging
+POSTGRES_PASSWORD=*** ./scripts/deploy.sh production
+
+<span class="c"># Por baixo, o deploy.sh executa:</span>
+docker compose -p ecotrack-staging \
+  --env-file deploy/staging.env up -d --no-build
+
+<span class="c"># Verificação pós-deploy</span>
+./scripts/smoke-test.sh http://localhost:8081
+./scripts/smoke-test.sh http://localhost:8080 --read-only
+
+<span class="c"># Testes</span>
+./mvnw verify</pre>
+  </div>
+</section>
+
+<!-- 7. Imagem criada -->
+<section class="slide" data-n="7">
+  <div class="eyebrow">Docker · imagem criada</div>
+  <h1>ecotrack-api: 162 MB, não-root, com healthcheck</h1>
+  <div class="shot"><img src="../prints/18-imagem-docker.png"></div>
+  <div class="legenda">No pipeline, a mesma imagem é publicada em <code>ghcr.io/mateusbhering/ecotrack-api</code> com a tag do commit.
+    A camada da aplicação tem 188 kB; as dependências (60 MB) ficam em cache.</div>
+</section>
+
+<!-- 8. Pipeline rodando -->
+<section class="slide" data-n="8">
+  <div class="eyebrow">Evidência · pipeline rodando</div>
+  <h1>GitHub Actions: build, testes, imagem, staging e produção</h1>
+  <div class="shot"><img src="../prints/01-pipeline-github-actions.png"></div>
+  <div class="legenda">Execução pública em github.com/mateusbhering/FIAP_Fase6_Desafio_Devops/actions</div>
+</section>
+
+<!-- 9. Resumo da execução -->
+<section class="slide" data-n="9">
+  <div class="eyebrow">Evidência · testes e deploy no pipeline</div>
+  <h1>Deploys anotados e artefatos gerados pelo pipeline</h1>
+  <div class="shot"><img src="../prints/02-pipeline-resumo.png"></div>
+  <div class="legenda">Cada deploy registra o alvo usado. O pipeline publica o <code>.jar</code>, os relatórios de testes e cobertura (<code>relatorios-testes</code>) e o registro do build Docker.</div>
+</section>
+
+<section class="slide" data-n="10">
+  <div class="eyebrow">Evidência · deploys</div>
+  <h1>Deploys registrados nos environments staging e production</h1>
+  <div class="shot"><img src="../prints/03-github-deployments.png"></div>
+  <div class="legenda">Dados da API pública do GitHub: cada execução do pipeline registrou um deploy em <i>staging</i> e outro em <i>production</i>, todos com status <b>success</b>.</div>
+</section>
+
+<section class="slide" data-n="11">
+  <div class="eyebrow">Evidência · testes automatizados</div>
+  <h1>11 testes aprovados, 95,7% de cobertura de linhas</h1>
+  <div class="shot"><img src="../prints/17-testes-locais.png"></div>
+  <div class="legenda">Testes unitários (service), de camada web (controller com MockMvc) e de integração (contexto completo + Flyway + banco). No pipeline, a mesma execução roda no job <i>Build e testes</i>.</div>
+</section>
+
+<section class="slide" data-n="12">
+  <div class="eyebrow">Evidência · ambiente de staging</div>
+  <h1>Staging funcionando: documentação da API</h1>
+  <div class="shot"><img src="../prints/10-staging-swagger.png"></div>
+  <div class="legenda">Swagger UI habilitado no perfil <code>staging</code> (http://localhost:8081).</div>
+</section>
+
+<section class="slide" data-n="13">
+  <div class="eyebrow">Evidência · ambiente de staging</div>
+  <h1>Staging funcionando: chamadas à API</h1>
+  <div class="shot"><img src="../prints/11-staging-api.png"></div>
+  <div class="legenda"><code>/actuator/info</code> reporta <code>environment: staging</code>; health mostra o PostgreSQL conectado; inventário da cidade consolidado em tCO₂e por escopo.</div>
+</section>
+
+<section class="slide" data-n="14">
+  <div class="eyebrow">Evidência · ambiente de produção</div>
+  <h1>Produção funcionando (porta 8080, perfil prod)</h1>
+  <div class="shot"><img src="../prints/12-producao-api.png"></div>
+  <div class="legenda">Ambiente reportado como <code>production</code>, health sem detalhes internos e Swagger desativado (404), como esperado em produção.</div>
+</section>
+
+<section class="slide" data-n="15">
+  <div class="eyebrow">Evidência · orquestração</div>
+  <h1>Containers, volumes, redes e variáveis de ambiente</h1>
+  <div class="shot"><img src="../prints/13-docker-containers-volumes-redes.png"></div>
+  <div class="legenda">Quatro containers <i>healthy</i>; volumes e redes isolados por ambiente; rede backend <code>internal=true</code>; variáveis injetadas pelo Compose; processo rodando como usuário não-root.</div>
+</section>
+
+<section class="slide" data-n="16">
+  <div class="eyebrow">Evidência · verificação pós-deploy</div>
+  <h1>Smoke tests aprovados em staging e produção</h1>
+  <div class="shot"><img src="../prints/14-smoke-tests.png"></div>
+  <div class="legenda">Staging: teste completo, com escrita e limpeza. Produção: somente leitura. São os mesmos scripts executados pelo pipeline após cada deploy.</div>
+</section>
+
+<section class="slide" data-n="17">
+  <div class="eyebrow">Evidência · robustez</div>
+  <h1>Rollback automático de uma versão quebrada</h1>
+  <div class="shot"><img src="../prints/15-rollback-automatico.png"></div>
+  <div class="legenda">A readiness probe detecta que a nova versão não subiu; o <code>deploy.sh</code> volta sozinho para a imagem anterior e o job falha, bloqueando a promoção.</div>
+</section>
+
+<section class="slide" data-n="18">
+  <div class="eyebrow">Evidência · robustez</div>
+  <h1>Persistência de dados no volume db-data</h1>
+  <div class="shot"><img src="../prints/16-persistencia-volume.png"></div>
+  <div class="legenda">Os containers e as redes são removidos com <code>docker compose down</code> e recriados pelo deploy; os registros continuam lá.</div>
+</section>
+
+<!-- 15. Desafios -->
+<section class="slide" data-n="19">
+  <div class="eyebrow">Aprendizados</div>
+  <h1>Desafios encontrados e como foram resolvidos</h1>
+  <table>
+    <tr><th style="width:36%">Desafio</th><th>Solução</th></tr>
+    <tr><td>A imagem <code>eclipse-temurin:17-jre-alpine</code> não tem versão ARM64: o build falhava no Mac com Apple Silicon (<i>no match for platform in manifest</i>)</td><td>Troca para <code>eclipse-temurin:17-jre</code> (multi-arquitetura) e ajuste dos comandos de usuário e healthcheck para a base Ubuntu</td></tr>
+    <tr><td>O Docker travava ao montar a pasta do projeto (Desktop do macOS) como <i>bind mount</i></td><td>O Compose passou a usar só <b>volumes nomeados</b>; o build envia o contexto sem depender de montagem de pasta</td></tr>
+    <tr><td>Maven não instalado na máquina de desenvolvimento</td><td><b>Maven Wrapper</b> (<code>./mvnw</code>): a mesma versão do Maven no computador e no CI, sem instalação</td></tr>
+    <tr><td>Sem servidor em nuvem disponível para staging e produção</td><td>Workflow de deploy com dois alvos: <b>SSH</b> para uma VM ou o <b>runner</b> do GitHub, usando o mesmo Compose e o mesmo script</td></tr>
+    <tr><td>Evitar que uma versão quebrada derrube um ambiente</td><td>Espera da <i>readiness probe</i>, <b>rollback automático</b>, smoke tests e gate staging → produção</td></tr>
+    <tr><td>Testes de integração sem depender de um PostgreSQL no CI</td><td>H2 em modo PostgreSQL, rodando as <b>mesmas migrations Flyway</b> de produção</td></tr>
+    <tr><td>Senha do banco sem ir para o repositório</td><td>Secrets por Environment, senha efêmera e mascarada no runner, Compose que não sobe sem a senha</td></tr>
+    <tr><td>Primeira execução com avisos de actions obsoletas (Node 20) e PRs do Dependabot com saltos de versão principal</td><td>Actions atualizadas para as versões atuais; Dependabot configurado para ignorar migrações de versão principal (Spring Boot 4, Java 24)</td></tr>
+  </table>
+</section>
+
+<!-- 16. Checklist -->
+<section class="slide" data-n="20">
+  <div class="eyebrow">Entrega</div>
+  <h1>Checklist de entrega</h1>
+  <table style="font-size:17px; max-width: 900px">
+    <tr><th>Item</th><th style="width:90px">OK</th></tr>
+    <tr><td>Projeto compactado em .ZIP com estrutura organizada</td><td>☑</td></tr>
+    <tr><td>Dockerfile funcional</td><td>☑</td></tr>
+    <tr><td>docker-compose.yml ou arquivos Kubernetes</td><td>☑</td></tr>
+    <tr><td>Pipeline com etapas de build, teste e deploy</td><td>☑</td></tr>
+    <tr><td>README.md com instruções e prints</td><td>☑</td></tr>
+    <tr><td>Documentação técnica com evidências (PDF ou PPT)</td><td>☑</td></tr>
+    <tr><td>Deploy realizado nos ambientes staging e produção</td><td>☑</td></tr>
+  </table>
+  <p style="margin-top:22px; color: var(--cinza)">Repositório e pipeline públicos: github.com/mateusbhering/FIAP_Fase6_Desafio_Devops</p>
+</section>
+
+</body>
+</html>
